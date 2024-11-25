@@ -1,0 +1,25 @@
+<main>
+    @switch (type) { @case (1) {
+    <div
+      class="animate__animated animate__bounceInUp z-30 bg-green-600 text-white p-4 rounded-md fixed bottom-7 sm:right-8 flex justify-center items-center transition-all duration-500 ease-in-out"
+    >
+      <span class="material-icons text-white mr-5">check_circle </span>
+      <p>{{ texto }}</p>
+    </div>
+    } @case (2) {
+    <div
+      class="animate__animated animate__bounceInUp z-30 bg-yellow-600 text-white p-4 rounded-md fixed bottom-7 sm:right-8 flex justify-center items-center transition-all duration-500 ease-in-out"
+    >
+      <span class="material-icons text-white mr-5">warning </span>
+      <p>{{ texto }}</p>
+    </div>
+    } @case (3) {
+    <div
+      class="animate__animated animate__bounceInUp z-30 bg-red-600 text-white p-4 rounded-md fixed bottom-7 sm:right-8 flex justify-center items-center transition-all duration-500 ease-in-out"
+    >
+      <span class="material-icons text-white mr-5">cancel </span>
+      <p>{{ texto }}</p>
+    </div>
+    } }
+  </main>
+  
