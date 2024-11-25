@@ -12,9 +12,11 @@
     </div>
   </div>
   <div>
-    <h2 class="text-mainColor text-center lg:text-left font-bold text-xl">Viajes registrados</h2>
+    <h2 class="text-mainColor text-center lg:text-left font-bold text-xl">
+      Viajes registrados
+    </h2>
   </div>
-  <app-table-reutilizable 
+  <app-table-reutilizable
     [data]="ELEMENT_DATA"
     [columns]="['name', 'position', 'weight', 'symbol']"
     [headers]="['Name', 'Position', 'Weight', 'Symbol']"
@@ -25,4 +27,6 @@
 </main>
 @if(openModalNewTravel) {
 <app-modal-new-travel (responseModal)="closeModalNewTravel($event)" />
+} @if (openModalEditTravel) {
+<app-modal-edit-travel [dataForm]="dataForm" (responseModal)="closeModalEditTravel($event)" />
 }

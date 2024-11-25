@@ -2,22 +2,34 @@ import { Component } from '@angular/core';
 import { TittleSectionComponentComponent } from '../../../components/tittle-section-component/tittle-section-component.component';
 import { ModalNewTravelComponent } from '../../components/modal-new-travel/modal-new-travel.component';
 import { TableReutilizableComponent } from '../../../components/table-reutilizable/table-reutilizable.component';
+import { ModalEditTravelComponent } from '../../components/modal-edit-travel/modal-edit-travel.component';
 
 @Component({
   selector: 'app-travels-page',
-  imports: [TittleSectionComponentComponent,ModalNewTravelComponent,TableReutilizableComponent],
+  imports: [TittleSectionComponentComponent,ModalNewTravelComponent,TableReutilizableComponent,ModalEditTravelComponent],
   templateUrl: './travels-page.component.html',
   styleUrl: './travels-page.component.css'
 })
 export default class TravelsPageComponent {
   openModalNewTravel: boolean = false
+  openModalEditTravel: boolean = false
+  dataForm: any = {}
 
   closeModalNewTravel(emitVallue: boolean) {
     this.openModalNewTravel = emitVallue
   }
 
   returnItemForEdit(item: PeriodicElement) {
-    console.log(item);
+    this.dataForm = item
+    this.openModalEditTravel = true
+  }
+
+  closeModalEditTravel(emitVallue: boolean) {
+    if(!emitVallue){
+      this.openModalEditTravel = false
+      return;
+    }
+    this.openModalEditTravel = emitVallue
   }
 
   ELEMENT_DATA: PeriodicElement[] = [
