@@ -1,0 +1,28 @@
+<main>
+  <app-tittle-section-component [title]="'Viajes'" />
+  <div class="flex flex-col md:flex-row items-center justify-end">
+    <div class="w-full md:w-auto">
+      <button
+        (click)="openModalNewTravel = true"
+        class="btn-primary w-full md:w-auto"
+      >
+        <span class="material-icons me-2">add_circle</span>
+        Registrar viaje
+      </button>
+    </div>
+  </div>
+  <div>
+    <h2 class="text-mainColor text-center lg:text-left font-bold text-xl">Viajes registrados</h2>
+  </div>
+  <app-table-reutilizable 
+    [data]="ELEMENT_DATA"
+    [columns]="['name', 'position', 'weight', 'symbol']"
+    [headers]="['Name', 'Position', 'Weight', 'Symbol']"
+    [pagination]="true"
+    [onlyEdit]="true"
+    (returnItemForEdit)="returnItemForEdit($event)"
+  />
+</main>
+@if(openModalNewTravel) {
+<app-modal-new-travel (responseModal)="closeModalNewTravel($event)" />
+}
