@@ -1,0 +1,102 @@
+<div class="flex flex-row items-center justify-between lg:hidden">
+  <div>
+    <button
+      (click)="toggleMenu()"
+      data-drawer-target="logo-sidebar"
+      data-drawer-toggle="logo-sidebar"
+      aria-controls="logo-sidebar"
+      type="button"
+      class="inline-flex items-center p-2 mt-2 ms-3 text-sm text-gray-500 rounded-lg lg:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200"
+    >
+      <span class="material-icons">menu</span>
+    </button>
+  </div>
+  <div>
+    <img
+      src="/LIS-logo-final-300x151.png"
+      alt="logoPealpan"
+      class="w-[60px] p-2 mt-2 ms-3"
+    />
+  </div>
+</div>
+
+@if (menuVisible) {
+<div
+  (click)="closeMenu()"
+  class="fixed inset-0 bg-black bg-opacity-50 z-30 lg:hidden"
+></div>
+}
+
+<aside
+  id="logo-sidebar"
+  [class.-translate-x-full]="!menuVisible"
+  [class.translate-x-0]="menuVisible"
+  class="fixed top-0 left-0 z-40 w-[260px] h-screen transition-transform lg:translate-x-0"
+  aria-label="Sidebar"
+>
+  <div class="h-full px-3 py-4 overflow-y-auto bg-mainColor">
+    <a class="flex items-center ps-2.5 mb-5">
+      <span class="material-icons h-6 me-3 lg:h-7 text-white text-3xl"
+        >account_circle</span
+      >
+      <span
+        class="self-center text-xl font-semibold whitespace-nowrap text-white"
+        >Usuario</span
+      >
+    </a>
+    <ul class="space-y-2 font-medium">
+      <li
+        class="flex items-center p-2 text-gray-900 rounded-lg hover:bg-hover group cursor-pointer"
+      >
+        <span
+          class="material-icons flex-shrink-0 w-5 h-5 text-white transition duration-75 group-hover:text-gray-900"
+          >flight</span
+        >
+        <span class="flex-1 ms-3 whitespace-nowrap text-white">Viajes</span>
+      </li>
+
+      <li
+        class="flex items-center p-2 text-gray-900 rounded-lg hover:bg-hover group cursor-pointer"
+      >
+        <span
+          class="material-icons flex-shrink-0 w-5 h-5 text-white transition duration-75 group-hover:text-gray-900"
+          >local_shipping</span
+        >
+        <span class="flex-1 ms-3 whitespace-nowrap text-white">Registro de operadores</span>
+      </li>
+
+      <li
+        class="flex items-center p-2 text-gray-900 rounded-lg hover:bg-hover group cursor-pointer"
+      >
+        <span
+          class="material-icons flex-shrink-0 w-5 h-5 text-white transition duration-75 group-hover:text-gray-900"
+          >pin_drop</span
+        >
+        <span class="flex-1 ms-3 whitespace-nowrap text-white">Registro de Ciudades</span>
+      </li>
+
+      <li
+        class="flex items-center p-2 text-gray-900 rounded-lg hover:bg-hover group cursor-pointer"
+      >
+        <span
+          class="material-icons flex-shrink-0 w-5 h-5 text-white transition duration-75 group-hover:text-gray-900"
+          >key</span
+        >
+        <span class="flex-1 ms-3 whitespace-nowrap text-white"
+          >Cambiar contraseña</span
+        >
+      </li>
+      <li
+        class="flex items-center p-2 text-gray-900 rounded-lg hover:bg-hover group cursor-pointer"
+      >
+        <span
+          class="material-icons flex-shrink-0 w-5 h-5 text-white transition duration-75 group-hover:text-gray-900"
+          >logout</span
+        >
+        <span class="flex-1 ms-3 whitespace-nowrap text-white"
+          >Cerrar sesión</span
+        >
+      </li>
+    </ul>
+  </div>
+</aside>
