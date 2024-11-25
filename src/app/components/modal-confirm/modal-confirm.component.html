@@ -1,0 +1,86 @@
+<div class="fixed z-50 inset-0 overflow-y-auto" role="dialog">
+    <div
+      class="flex sm:items-end items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0"
+    >
+      <div
+        class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
+        (click)="closeModalFalse(false)"
+      ></div>
+      <span
+        class="hidden sm:inline-block sm:align-middle sm:h-screen"
+        >&#8203;</span
+      >
+      <div
+        #ModalConfirm
+        class="inline-block animate__animated animate__fadeInDown align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full"
+      >
+        <div class="w-full bg-mainColor h-6">
+  
+        </div>
+        <div class="bg-secundaryColor px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+          <div class="flex items-center flex-col">
+            <div>
+              <span class="material-icons text-yellow-500 text-[35px]"
+                >warning</span
+              >
+            </div>
+            <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
+              <h3
+                class="text-lg text-center text-black leading-6 font-medium"
+                id="modal-title"
+              >
+                {{ mensajeModal }}
+              </h3>
+            </div>
+          </div>
+        </div>
+        <div
+          class="bg-secundaryColor px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse"
+        >
+          <button
+            (click)="closeModalTrue(true)"
+            [disabled]="loadingButton"
+            type="submit"
+            class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-mainColor text-base font-medium text-white hover:bg-hover focus:outline-none sm:ml-3 sm:w-auto mb-[10px] sm:mb-0 sm:text-sm disabled:bg-gray-500"
+          >
+            @if (loadingButton) {
+            <div class="flex items-center space-x-2 justify-center">
+              <svg
+                class="w-5 h-5 animate-spin"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <circle
+                  class="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  stroke-width="4"
+                ></circle>
+                <path
+                  class="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                ></path>
+              </svg>
+              <span>Cargando</span>
+            </div>
+            }@else {
+            <span>Aceptar</span>
+            }
+          </button>
+  
+          <button
+            type="button"
+            (click)="closeModalFalse(false)"
+            class="w-full inline-flex justify-center rounded-md shadow-sm px-4 py-2 border-solid border-2 border-gray-500 text-base font-medium hover:bg-white hover:text-black focus:outline-none sm:ml-3 sm:w-auto sm:text-sm text-black"
+          >
+            Cerrar
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
