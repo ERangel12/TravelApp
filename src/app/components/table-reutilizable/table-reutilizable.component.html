@@ -1,0 +1,81 @@
+<div class="w-full mt-5 overflow-x-auto">
+  <table class="w-full">
+    <thead class="font-semibold border-b border-gray-400">
+      <tr>
+        @for (colum of headers; track $index) {
+        <th class="pb-4 text-center">{{ colum }}</th>
+        } @if (onlyEdit) {
+        <th class="pb-4 text-center">Editar</th>
+        }
+      </tr>
+    </thead>
+    <tbody class="">
+      @for (item of (pagination ? currentPageData : data); track $index) {
+      <tr
+        class="border-b border-gray-400 hover:bg-gray-200 text-center text-gray-950"
+      >
+        @for (column of columns; track $index) {
+        <td class="pb-2 pt-2 text-center">{{ item[column] }}</td>
+        } @if (onlyEdit) {
+        <td>
+          <button (click)="onReturnItemForEdit(item)">
+            <span class="material-icons text-mainColor text-[25px]">edit</span>
+          </button>
+        </td>
+        }
+      </tr>
+      } @empty {
+      <tr>
+        <td class="py-2 text-center" colspan="100">
+          <div class="flex justify-center">
+            <div
+              class="bg-mainColor text-white font-bold rounded-md px-4 py-2 flex p-4 w-3/4 h-1/4 sm:h-14 items-center"
+            >
+              <span class="material-icons text-white mr-5">info </span>
+              <p>No se encontraron registros</p>
+            </div>
+          </div>
+        </td>
+      </tr>
+      }
+    </tbody>
+  </table>
+  @if (pagination && currentPageData.length > 0) {
+  <div
+    class="py-3 flex justify-between items-center border-b border-gray-400"
+  >
+    <div class="ml-2">
+      <button (click)="onPageChange(+page - 1)" [disabled]="page === 1">
+        <span
+          class=" material-icons inline-flex justify-center px-4 text-base font-medium text-black"
+          [ngClass]="{ 'text-black': page !== 1, 'text-gray-400': page === 1 }"
+          >arrow_back_ios</span 
+        >
+      </button>
+    </div>
+
+    <div class="">
+        <p class="text-black">
+          Página {{ page }} - {{ ceil(data.length / itemsPerPage) }}
+        </p>
+      </div>
+
+    <div class="mr-2">
+      <button
+        (click)="onPageChange(+page + 1)"
+        [disabled]="page === ceil(data.length / itemsPerPage)"
+      >
+        <span
+          class=" material-icons inline-flex justify-center px-4 text-base font-medium text-black"
+          [ngClass]="{
+            'text-black': page !== ceil(data.length / itemsPerPage),
+            'text-gray-400': page === ceil(data.length / itemsPerPage)
+          }"
+          >arrow_forward_ios</span
+        >
+      </button>
+    </div>
+  </div>
+
+  }
+</div>
