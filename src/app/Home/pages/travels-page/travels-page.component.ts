@@ -1,54 +1,76 @@
-import { Component } from '@angular/core';
+import { SnackBarService } from './../../../shared/services/snack-bar.service';
+import { Component, inject, OnInit } from '@angular/core';
 import { TittleSectionComponentComponent } from '../../../components/tittle-section-component/tittle-section-component.component';
 import { ModalNewTravelComponent } from '../../components/modal-new-travel/modal-new-travel.component';
 import { TableReutilizableComponent } from '../../../components/table-reutilizable/table-reutilizable.component';
 import { ModalEditTravelComponent } from '../../components/modal-edit-travel/modal-edit-travel.component';
+import { TravelApiService } from '../../services/travel-api.service';
+import { TravelList } from '../../interfaces/travel-list.interface';
+import { SnackBarsComponentComponent } from '../../../components/snack-bars-component/snack-bars-component.component';
+import { SpinnerInlineComponent } from '../../../components/spinner-inline/spinner-inline.component';
 
 @Component({
   selector: 'app-travels-page',
-  imports: [TittleSectionComponentComponent,ModalNewTravelComponent,TableReutilizableComponent,ModalEditTravelComponent],
+  imports: [
+    TittleSectionComponentComponent,
+    ModalNewTravelComponent,
+    TableReutilizableComponent,
+    ModalEditTravelComponent,
+    SnackBarsComponentComponent,
+    SpinnerInlineComponent,
+  ],
   templateUrl: './travels-page.component.html',
-  styleUrl: './travels-page.component.css'
+  styleUrl: './travels-page.component.css',
 })
-export default class TravelsPageComponent {
-  openModalNewTravel: boolean = false
-  openModalEditTravel: boolean = false
-  dataForm: any = {}
+export default class TravelsPageComponent implements OnInit {
+  private travelService = inject(TravelApiService);
+  public alertsService = inject(SnackBarService);
 
-  closeModalNewTravel(emitVallue: boolean) {
-    this.openModalNewTravel = emitVallue
+  openModalNewTravel: boolean = false;
+  openModalEditTravel: boolean = false;
+  dataForm!: TravelList;
+  LIST_TRAVELS: TravelList[] = [];
+  isLoading: boolean = false;
+
+  ngOnInit(): void {
+    this.getListTravels();
   }
 
-  returnItemForEdit(item: PeriodicElement) {
-    this.dataForm = item
-    this.openModalEditTravel = true
+  getListTravels() {
+    this.isLoading = true;
+    this.travelService.getTravels().subscribe({
+      next: (res) => {
+        this.LIST_TRAVELS = res;
+        this.isLoading = false;
+      },
+      error: (err) => {
+        console.log(err);
+        this.isLoading = false;
+        this.alertsService.alerts(3, 'Ocurrio un error al obtener los viajes');
+      },
+    });
+  }
+
+  closeModalNewTravel(emitVallue: boolean) {
+    if (!emitVallue) {
+      this.openModalNewTravel = false;
+      return;
+    }
+    this.openModalNewTravel = false;
+    this.getListTravels();
+  }
+
+  returnItemForEdit(item: any) {
+    this.dataForm = item;
+    this.openModalEditTravel = true;
   }
 
   closeModalEditTravel(emitVallue: boolean) {
-    if(!emitVallue){
-      this.openModalEditTravel = false
+    if (!emitVallue) {
+      this.openModalEditTravel = false;
       return;
     }
-    this.openModalEditTravel = emitVallue
+    this.openModalEditTravel = false;
+    this.getListTravels();
   }
-
-  ELEMENT_DATA: PeriodicElement[] = [
-    {position: 1, name: 'Hydrogen', weight: 1.0079, symbol: 'H'},
-    {position: 2, name: 'Helium', weight: 4.0026, symbol: 'He'},
-    {position: 3, name: 'Lithium', weight: 6.941, symbol: 'Li'},
-    {position: 4, name: 'Beryllium', weight: 9.0122, symbol: 'Be'},
-    {position: 5, name: 'Boron', weight: 10.811, symbol: 'B'},
-    {position: 6, name: 'Carbon', weight: 12.0107, symbol: 'C'},
-    {position: 7, name: 'Nitrogen', weight: 14.0067, symbol: 'N'},
-    {position: 8, name: 'Oxygen', weight: 15.9994, symbol: 'O'},
-    {position: 9, name: 'Fluorine', weight: 18.9984, symbol: 'F'},
-    {position: 10, name: 'Neon', weight: 20.1797, symbol: 'Ne'},
-  ];
-}
-
-export interface PeriodicElement {
-  name: string;
-  position: number;
-  weight: number;
-  symbol: string;
 }

@@ -15,7 +15,7 @@
         class="border-b border-gray-400 hover:bg-gray-200 text-center text-gray-950"
       >
         @for (column of columns; track $index) {
-        <td class="pb-2 pt-2 text-center">{{ item[column] }}</td>
+        <td class="pb-2 pt-2 text-center">{{ formatDate(item[column],column,item) }}</td>
         } @if (onlyEdit) {
         <td>
           <button (click)="onReturnItemForEdit(item)">

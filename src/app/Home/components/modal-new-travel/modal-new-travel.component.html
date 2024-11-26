@@ -29,147 +29,139 @@
               </h3>
             </div>
             <form>
-            <!-- Section destiny -->
-              <div class="flex flex-col sm:flex-row">
+              <!-- Section destiny -->
+              <div class="flex flex-col sm:flex-row justify-center">
+                @if (isLoadingDestinations) {
+                <app-spinner-inline />
+                }@else {
                 <div class="flex flex-col mb-2 sm:mr-3">
-                    <span class="text-black mb-2">Origen del viaje</span>
-    
-                    <div class="flex flex-row items-center">
-                        <div class="mr-1">
-                            <span
-                            class="material-icons  text-mainColor "
-                            >map</span
-                          >
-                        </div>
-                        <div>
-                            
-                          <input
-                            type="text"
-                            formControlName="startTravel"
-                            placeholder=" Nombre"
-                            class="placeholder-white bg-secundaryColor text-black w-[320px] px-5 h-[40px] border-[1px] border-mainColor rounded-[4px] sm:w-[250px] invalid:border-red-500"
-                          />
-                        </div>
-                    </div>
-                    
-                  </div>
-                  <div class="flex flex-col mb-2">
-                    <span class="text-black mb-2">Destino del viaje</span>
-    
-                    <div class="flex flex-row items-center">
-                        <div class="mr-1">
-                            <span
-                            class="material-icons  text-mainColor "
-                            >location_on</span
-                          >
-                        </div>
-                        <div>
-                            
-                          <input
-                            type="text"
-                            formControlName="endTravel"
-                            placeholder=" Nombre"
-                            class="placeholder-white bg-secundaryColor text-black w-[320px] px-5 h-[40px] border-[1px] border-mainColor rounded-[4px] sm:w-[250px] invalid:border-red-500"
-                          />
-                        </div>
-                    </div>
-                    
-                  </div>
-              </div>
-            <!-- Section destiny -->
+                  <span class="text-black mb-2">Origen del viaje</span>
 
-             <!-- Section time -->
-              <div class="flex flex-col sm:flex-row">
-                <div class="flex flex-col mb-2 sm:mr-3">
-                    <span class="text-black mb-2">Fecha incio del viaje</span>
-    
-                    <div class="flex flex-row items-center">
-                        <div class="mr-1">
-                            <span
-                            class="material-icons  text-mainColor "
-                            >calendar_month</span
-                          >
-                        </div>
-                        <div>
-                            
-                          <input
-                            type="datetime-local"
-                            formControlName="dateStartTravel"
-                            placeholder=" Nombre"
-                            class="placeholder-white bg-secundaryColor text-black w-[320px] px-5 h-[40px] border-[1px] border-mainColor rounded-[4px] sm:w-[250px] invalid:border-red-500"
-                          />
-                        </div>
-                    </div>
-                    
-                  </div>
-                  <div class="flex flex-col mb-2">
-                    <span class="text-black mb-2">Fecha fin del viaje</span>
-    
-                    <div class="flex flex-row items-center">
-                        <div class="mr-1">
-                            <span
-                            class="material-icons  text-mainColor "
-                            >calendar_month</span
-                          >
-                        </div>
-                        <div>
-                            
-                          <input
-                            type="datetime-local"
-                            formControlName="dateEndTravel"
-                            placeholder=" Nombre"
-                            class="placeholder-white bg-secundaryColor text-black w-[320px] px-5 h-[40px] border-[1px] border-mainColor rounded-[4px] sm:w-[250px] invalid:border-red-500"
-                          />
-                        </div>
-                    </div>
-                    
-                  </div>
-              </div>
-
-               <!-- Section time -->
-
-
-               <div class="flex flex-col mb-2">
-                <span class="text-black mb-2">Operador del viaje</span>
-
-                <div class="flex flex-row items-center">
+                  <div class="flex flex-row items-center">
                     <div class="mr-1">
-                        <span
-                        class="material-icons  text-mainColor "
-                        >local_shipping</span
+                      <span class="material-icons text-mainColor">map</span>
+                    </div>
+                    <div>
+                      <select
+                        formControlName="startTravel"
+                        class="placeholder-black bg-secundaryColor text-black w-[320px] px-5 h-[40px] border-[1px] border-mainColor rounded-[4px] sm:w-[250px] invalid:border-red-500"
+                      >
+                        <option disabled selected value="">
+                          Origen del viaje
+                        </option>
+                        @for (dest of LIST_DESTINATIONS; track $index) {
+                        <option [value]="dest.id">
+                          {{ dest.city }}
+                        </option>
+                        }
+                      </select>
+                    </div>
+                  </div>
+                </div>
+                <div class="flex flex-col mb-2">
+                  <span class="text-black mb-2">Destino del viaje</span>
+
+                  <div class="flex flex-row items-center">
+                    <div class="mr-1">
+                      <span class="material-icons text-mainColor"
+                        >location_on</span
                       >
                     </div>
                     <div>
-                        
+                      <select
+                        formControlName="endTravel"
+                        class="placeholder-black bg-secundaryColor text-black w-[320px] px-5 h-[40px] border-[1px] border-mainColor rounded-[4px] sm:w-[250px] invalid:border-red-500"
+                      >
+                        <option disabled selected value="">
+                          Destino del viaje
+                        </option>
+                        @for (dest of LIST_DESTINATIONS; track $index) {
+                        <option [value]="dest.id">
+                          {{ dest.city }}
+                        </option>
+                        }
+                      </select>
+                    </div>
+                  </div>
+                </div>
+                }
+              </div>
+              <!-- Section destiny -->
+
+              <!-- Section time -->
+              <div class="flex flex-col sm:flex-row">
+                <div class="flex flex-col mb-2 sm:mr-3">
+                  <span class="text-black mb-2">Fecha incio del viaje</span>
+
+                  <div class="flex flex-row items-center">
+                    <div class="mr-1">
+                      <span class="material-icons text-mainColor"
+                        >calendar_month</span
+                      >
+                    </div>
+                    <div>
                       <input
-                        type="text"
-                        formControlName="operatorTravel"
+                        type="date"
+                        formControlName="dateStartTravel"
                         placeholder=" Nombre"
-                        class="placeholder-white bg-secundaryColor text-black w-[320px] px-5 h-[40px] border-[1px] border-mainColor rounded-[4px] sm:w-[540px] invalid:border-red-500"
+                        class="placeholder-white bg-secundaryColor text-black w-[320px] px-5 h-[40px] border-[1px] border-mainColor rounded-[4px] sm:w-[250px] invalid:border-red-500"
                       />
                     </div>
+                  </div>
                 </div>
-                
+                <div class="flex flex-col mb-2">
+                  <span class="text-black mb-2">Fecha fin del viaje</span>
+
+                  <div class="flex flex-row items-center">
+                    <div class="mr-1">
+                      <span class="material-icons text-mainColor"
+                        >calendar_month</span
+                      >
+                    </div>
+                    <div>
+                      <input
+                        type="date"
+                        formControlName="dateEndTravel"
+                        placeholder=" Nombre"
+                        class="placeholder-white bg-secundaryColor text-black w-[320px] px-5 h-[40px] border-[1px] border-mainColor rounded-[4px] sm:w-[250px] invalid:border-red-500"
+                      />
+                    </div>
+                  </div>
+                </div>
               </div>
 
-              <!-- @if (isLoadingUsersTypes) {
-                <app-spinner-inline />
-                }@else {
+              <!-- Section time -->
+              @if (isLoadingOperators) {
+              <app-spinner-inline />
+              }@else {
                 <div class="flex flex-col mb-2">
-                  <span class="text-black mb-2">Rol del usuario</span>
-                  <select
-                    formControlName="roleId"
-                    class="placeholder-black bg-secundaryColor text-black w-[320px] px-5 h-[40px] border-[1px] border-mainColor rounded-[4px] sm:w-[400px] invalid:border-red-500"
-                  >
-                    <option disabled selected value="">Rol</option>
-                    @for (rol of LIST_ROLES.data; track $index) {
-                    <option [value]="rol.id">
-                      {{ rol.name }}
-                    </option>
-                    }
-                  </select>
+                <span class="text-black mb-2">Operador del viaje</span>
+
+                <div class="flex flex-row items-center">
+                  <div class="mr-1">
+                    <span class="material-icons text-mainColor"
+                      >local_shipping</span
+                    >
+                  </div>
+                  <div>
+                    <select
+                        formControlName="operatorTravel"
+                        class="placeholder-black bg-secundaryColor text-black w-[320px] px-5 h-[40px] border-[1px] border-mainColor rounded-[4px] sm:w-[540px] invalid:border-red-500"
+                      >
+                        <option disabled selected value="">
+                          Operador del viaje
+                        </option>
+                        @for (operator  of LIST_OPERATORS; track $index) {
+                        <option [value]="operator.id">
+                          {{ operator.name }}
+                        </option>
+                        }
+                      </select>
+                  </div>
                 </div>
-                } -->
+              </div>
+              }
+              
             </form>
           </div>
         </div>

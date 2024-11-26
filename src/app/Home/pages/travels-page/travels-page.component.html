@@ -13,20 +13,35 @@
   </div>
   <div>
     <h2 class="text-mainColor text-center lg:text-left font-bold text-xl">
-      Viajes registrados
+      Lista de viajes
     </h2>
   </div>
-  <app-table-reutilizable
-    [data]="ELEMENT_DATA"
-    [columns]="['name', 'position', 'weight', 'symbol']"
-    [headers]="['Name', 'Position', 'Weight', 'Symbol']"
+  @if (isLoading) {
+    <div class="flex items-center justify-center h-40">
+      <div>
+        <app-spinner-inline />
+      </div>
+    </div>
+  
+  }@else {
+    <app-table-reutilizable
+    [data]="LIST_TRAVELS"
+    [columns]="['travelId', 'origenName', 'destinationName', 'operatorName', 'startDate', 'endDate']"
+    [headers]="['Id', 'Origen', 'Destino', 'Operador', 'Fecha de salida', 'Fecha de llegada']"
     [pagination]="true"
     [onlyEdit]="true"
     (returnItemForEdit)="returnItemForEdit($event)"
   />
+  }
+  
 </main>
 @if(openModalNewTravel) {
 <app-modal-new-travel (responseModal)="closeModalNewTravel($event)" />
 } @if (openModalEditTravel) {
 <app-modal-edit-travel [dataForm]="dataForm" (responseModal)="closeModalEditTravel($event)" />
 }
+@if (alertsService.isActiveBar()) {
+  <app-snack-bars-component
+  [type]="alertsService.typeSnackBar()" [texto]="alertsService.messageSnackBar()"
+  />
+  }

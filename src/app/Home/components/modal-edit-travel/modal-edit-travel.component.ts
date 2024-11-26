@@ -1,40 +1,140 @@
-import { Component, ElementRef, EventEmitter, inject, Input, OnInit, Output, ViewChild } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  EventEmitter,
+  inject,
+  Input,
+  OnInit,
+  Output,
+  ViewChild,
+} from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { ListCitys } from '../../interfaces/list-citys.interface';
+import { ListOperators } from '../../interfaces/list-operators.interface';
+import { SpinnerInlineComponent } from '../../../components/spinner-inline/spinner-inline.component';
+import { TravelApiService } from '../../services/travel-api.service';
+import { SnackBarService } from '../../../shared/services/snack-bar.service';
+import { TravelList } from '../../interfaces/travel-list.interface';
+import { forkJoin } from 'rxjs';
+import { NewTravel } from '../../interfaces/new-travel.interface';
 
 @Component({
   selector: 'app-modal-edit-travel',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, SpinnerInlineComponent],
   templateUrl: './modal-edit-travel.component.html',
-  styleUrl: './modal-edit-travel.component.css'
+  styleUrl: './modal-edit-travel.component.css',
 })
-export class ModalEditTravelComponent implements OnInit{
+export class ModalEditTravelComponent implements OnInit {
   @Output() responseModal = new EventEmitter<boolean>();
   @ViewChild('ModalEditTravel') ModalEditTravel!: ElementRef;
-  @Input() dataForm: any = {};
+  @Input() dataForm: TravelList = {
+    travelId: 0,
+    origenName: '',
+    destinationName: '',
+    operatorName: '',
+    startDate: new Date(),
+    endDate: new Date(),
+  };
 
   private fb = inject(FormBuilder);
+  private travelService = inject(TravelApiService);
+  public alertsService = inject(SnackBarService);
 
   isLoading: boolean = false;
+  isLoadingDestinations: boolean = false;
+  isLoadingOperators: boolean = false;
+
+  LIST_DESTINATIONS: ListCitys[] = [];
+  LIST_OPERATORS: ListOperators[] = [];
 
   public formEditTravel = this.fb.group({
     startTravel: ['', [Validators.required]],
     endTravel: ['', [Validators.required]],
     dateStartTravel: ['', [Validators.required]],
     dateEndTravel: ['', [Validators.required]],
-    operatorTravel: ['', [Validators.required]]
+    operatorTravel: ['', [Validators.required]],
   });
 
   ngOnInit(): void {
-    this.formEditTravel.patchValue(this.dataForm);
+    this.getData();
   }
 
-  editTravel(){
-    console.log(this.formEditTravel.value);
+  getData() {
+    this.isLoadingDestinations = true;
+    this.isLoadingOperators = true;
+
+    forkJoin({
+      destinations: this.travelService.getCitys(),
+      operators: this.travelService.getOperators(),
+    }).subscribe({
+      next: ({ destinations, operators }) => {
+        this.LIST_DESTINATIONS = destinations;
+        this.LIST_OPERATORS = operators;
+        this.isLoadingDestinations = false;
+        this.isLoadingOperators = false;
+        this.fillData();
+      },
+      error: (err) => {
+        console.log(err);
+        this.isLoadingDestinations = false;
+        this.isLoadingOperators = false;
+        this.alertsService.alerts(3, 'Ocurrió un error al obtener los datos');
+      },
+    });
   }
 
-  closeModal(emitVallue:boolean){
-    this.ModalEditTravel.nativeElement.classList.remove('animate__fadeInDown')
-    this.ModalEditTravel.nativeElement.classList.add('animate__fadeOutDown')
+  fillData() {
+    const destinationStart = this.LIST_DESTINATIONS.find(
+      (dest) => dest.city === this.dataForm.destinationName
+    );
+    const destinationEnd = this.LIST_DESTINATIONS.find(
+      (dest) => dest.city === this.dataForm.origenName
+    );
+    const operator = this.LIST_OPERATORS.find(
+      (op) => op.name === this.dataForm.operatorName
+    );
+
+    console.log(destinationStart);
+    console.log(destinationEnd);
+    console.log(operator);
+
+    this.formEditTravel.patchValue({
+      startTravel: destinationStart?.id.toString(),
+      endTravel: destinationEnd?.id.toString(),
+      dateStartTravel: this.dataForm.startDate.toString(),
+      dateEndTravel: this.dataForm.endDate.toString(),
+      operatorTravel: operator?.id.toString(),
+    });
+  }
+
+  editTravel() {
+    this.isLoading = true;
+    const newTravel: NewTravel = {
+      destinationId: parseInt(this.formEditTravel.value.startTravel ?? ''),
+      originId: parseInt(this.formEditTravel.value.endTravel ?? ''),
+      operatorId: parseInt(this.formEditTravel.value.operatorTravel ?? ''),
+      startDate: new Date(
+        this.formEditTravel.value.dateStartTravel || new Date()
+      ),
+      endDate: new Date(this.formEditTravel.value.dateEndTravel || new Date()),
+    };
+    this.travelService.editTravel(this.dataForm.travelId, newTravel).subscribe({
+      next: (res) => {
+        this.isLoading = false;
+        this.closeModal(true);
+        this.alertsService.alerts(1, 'Viaje editado exitosamente');
+      },
+      error: (err) => {
+        console.log(err);
+        this.isLoading = false;
+        this.alertsService.alerts(3, 'Ocurrio un error al editar el viaje');
+      },
+    });
+  }
+
+  closeModal(emitVallue: boolean) {
+    this.ModalEditTravel.nativeElement.classList.remove('animate__fadeInDown');
+    this.ModalEditTravel.nativeElement.classList.add('animate__fadeOutDown');
 
     setTimeout(() => {
       this.responseModal.emit(emitVallue);
