@@ -1,0 +1,9 @@
+.vs/
+Application/bin/Debug/
+Application/obj/
+Domain/bin/
+Domain/obj/
+Travel_Agency_Api/obj/
+Travel_Agency_Api/bin/
+Infraestructure/obj/
+Infraestructure/bin/
