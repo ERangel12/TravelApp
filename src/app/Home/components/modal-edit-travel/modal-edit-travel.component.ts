@@ -8,7 +8,7 @@ import {
   Output,
   ViewChild,
 } from '@angular/core';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, ReactiveFormsModule, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { ListCitys } from '../../interfaces/list-citys.interface';
 import { ListOperators } from '../../interfaces/list-operators.interface';
 import { SpinnerInlineComponent } from '../../../components/spinner-inline/spinner-inline.component';
@@ -53,7 +53,20 @@ export class ModalEditTravelComponent implements OnInit {
     dateStartTravel: ['', [Validators.required]],
     dateEndTravel: ['', [Validators.required]],
     operatorTravel: ['', [Validators.required]],
-  });
+  }, { validators: this.dateValidator() });
+
+  dateValidator(): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      const dateStartTravel = control.get('dateStartTravel')?.value;
+      const dateEndTravel = control.get('dateEndTravel')?.value;
+  
+      if ( dateStartTravel && dateEndTravel && new Date(dateEndTravel) < new Date(dateStartTravel)) {
+        return { dateValid: true };
+      }
+      return null;
+    };
+  }
+
 
   ngOnInit(): void {
     this.getData();
@@ -101,10 +114,23 @@ export class ModalEditTravelComponent implements OnInit {
     this.formEditTravel.patchValue({
       startTravel: destinationStart?.id.toString(),
       endTravel: destinationEnd?.id.toString(),
-      dateStartTravel: this.dataForm.startDate.toString(),
-      dateEndTravel: this.dataForm.endDate.toString(),
+      dateStartTravel: this.formatDate(this.dataForm.startDate),
+      dateEndTravel: this.formatDate(this.dataForm.endDate),
       operatorTravel: operator?.id.toString(),
     });
+  }
+
+  formatDate(date: Date): string {
+    const validDate = new Date(date);
+
+    if (isNaN(validDate.getTime())) {
+      return ''; 
+    }
+
+    const year = validDate.getFullYear();
+  const month = (validDate.getMonth() + 1).toString().padStart(2, '0'); // Añadir ceros si es necesario
+  const day = validDate.getDate().toString().padStart(2, '0'); // Añadir ceros si es necesario
+  return `${year}-${month}-${day}`;
   }
 
   editTravel() {

@@ -1,5 +1,5 @@
 import { Component, ElementRef, EventEmitter, inject, OnInit, Output, ViewChild } from '@angular/core';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, ReactiveFormsModule, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { SpinnerInlineComponent } from '../../../components/spinner-inline/spinner-inline.component';
 import { TravelApiService } from '../../services/travel-api.service';
 import { ListCitys } from '../../interfaces/list-citys.interface';
@@ -34,11 +34,23 @@ export class ModalNewTravelComponent implements OnInit {
     dateStartTravel: ['', [Validators.required]],
     dateEndTravel: ['', [Validators.required]],
     operatorTravel: ['', [Validators.required]]
-  });
+  },{ validators: this.dateValidator() });
 
   ngOnInit(): void {
     this.getListDestinations();
     this.getListOperators();
+  }
+
+dateValidator(): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      const dateStartTravel = control.get('dateStartTravel')?.value;
+      const dateEndTravel = control.get('dateEndTravel')?.value;
+  
+      if ( dateStartTravel && dateEndTravel && new Date(dateEndTravel) < new Date(dateStartTravel)) {
+        return { dateValid: true };
+      }
+      return null;
+    };
   }
 
   getListDestinations(){

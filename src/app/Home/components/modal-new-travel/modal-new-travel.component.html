@@ -129,6 +129,11 @@
                   </div>
                 </div>
               </div>
+              @if (formNewTravel.errors?.['dateValid']) {
+                <span class="text-red-500">
+                  La fecha final debe ser posterior a la fecha de inicio
+                </span>
+              }
 
               <!-- Section time -->
               @if (isLoadingOperators) {
